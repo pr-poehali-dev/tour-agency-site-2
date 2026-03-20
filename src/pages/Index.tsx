@@ -59,7 +59,7 @@ function TopBar() {
         <div className="flex items-center gap-6">
           <span className="flex items-center gap-1.5">
             <Icon name="Phone" size={12} />
-            <a href="tel:+78001234567" className="hover:text-yellow-300 transition-colors">8 800 123-45-67</a>
+            <a href="tel:+78005008020" className="hover:text-yellow-300 transition-colors">8 800 500-80-20</a>
             <span className="text-white/50">— бесплатно</span>
           </span>
           <span className="flex items-center gap-1.5">
@@ -108,7 +108,7 @@ function Nav({ active }: { active: string }) {
             <span className="text-lg">✈️</span>
           </div>
           <div>
-            <p className="font-heading text-[#0d47a1] text-base leading-tight" style={{ fontWeight: 800 }}>Солнечный Путь</p>
+            <p className="font-heading text-[#0d47a1] text-base leading-tight" style={{ fontWeight: 800 }}>ТУР КЛУБ</p>
             <p className="text-[10px] text-gray-400 leading-tight font-body">Официальный сайт</p>
           </div>
         </a>
@@ -122,9 +122,9 @@ function Nav({ active }: { active: string }) {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <a href="tel:+78001234567" className="flex items-center gap-1.5 text-[#1565c0] font-heading text-sm hover:text-[#0d47a1] transition-colors" style={{ fontWeight: 700 }}>
+          <a href="tel:+78005008020" className="flex items-center gap-1.5 text-[#1565c0] font-heading text-sm hover:text-[#0d47a1] transition-colors" style={{ fontWeight: 700 }}>
             <Icon name="Phone" size={15} />
-            8 800 123-45-67
+            8 800 500-80-20
           </a>
           <a href="#contacts" className="btn-orange px-5 py-2.5 text-sm font-heading" style={{ fontWeight: 700 }}>
             Подобрать тур
@@ -152,9 +152,35 @@ function Nav({ active }: { active: string }) {
   );
 }
 
-function Hero() {
-  const [form, setForm] = useState({ dest: "", date: "", nights: "", people: "2" });
+function TourvisorWidget() {
+  useEffect(() => {
+    // Загружаем скрипт Tourvisor если ещё не загружен
+    if (!document.getElementById("tv-script")) {
+      const s = document.createElement("script");
+      s.id = "tv-script";
+      s.src = "https://tourvisor.ru/widgetloader/widgetloader.js";
+      s.async = true;
+      document.body.appendChild(s);
+    }
+  }, []);
 
+  return (
+    <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
+      {/* Tourvisor iframe форма поиска — замените XXXXXX на ваш ID агентства */}
+      <iframe
+        src="https://tourvisor.ru/module/index.php?type=2&city=1&country=0&nocat=0&nights=7&nightsto=14&adults=2&child=0&hotels=&transport=1&meal=0&rating=0&departure=1&lang=ru&btncolor=f57c00&btnfontcolor=ffffff&color=1565c0&font=Open+Sans"
+        width="100%"
+        height="120"
+        frameBorder="0"
+        scrolling="no"
+        title="Поиск туров Tourvisor"
+        style={{ display: "block", minHeight: 110 }}
+      />
+    </div>
+  );
+}
+
+function Hero() {
   return (
     <section id="home" className="relative min-h-[88vh] flex items-center">
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${HERO_IMG})` }} />
@@ -168,7 +194,7 @@ function Hero() {
           </div>
         </div>
 
-        <div className="max-w-3xl">
+        <div className="max-w-4xl">
           <div className="inline-flex items-center gap-2 glass-white rounded-full px-4 py-1.5 text-white text-xs font-body mb-5">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
             Более 50 000 туристов уже с нами · Работаем с 2012 года
@@ -183,33 +209,8 @@ function Hero() {
             Поиск и бронирование туров по России и за рубежом. Горящие туры, рассрочка 0%, кэшбек 5% на каждый заказ.
           </p>
 
-          <div className="bg-white rounded-xl shadow-2xl p-2 flex flex-col md:flex-row gap-2">
-            <div className="flex-1 flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg">
-              <Icon name="MapPin" size={16} className="text-[#1565c0] shrink-0" />
-              <input type="text" placeholder="Страна или курорт" value={form.dest} onChange={(e) => setForm({ ...form, dest: e.target.value })} className="outline-none text-sm text-gray-800 placeholder-gray-400 flex-1 font-body" />
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg md:w-36">
-              <Icon name="Calendar" size={16} className="text-[#1565c0] shrink-0" />
-              <input type="text" placeholder="Дата вылета" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="outline-none text-sm text-gray-800 placeholder-gray-400 w-full font-body" />
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg md:w-32">
-              <Icon name="Moon" size={16} className="text-[#1565c0] shrink-0" />
-              <input type="text" placeholder="Ночей" value={form.nights} onChange={(e) => setForm({ ...form, nights: e.target.value })} className="outline-none text-sm text-gray-800 placeholder-gray-400 w-full font-body" />
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg md:w-32">
-              <Icon name="Users" size={16} className="text-[#1565c0] shrink-0" />
-              <select value={form.people} onChange={(e) => setForm({ ...form, people: e.target.value })} className="outline-none text-sm text-gray-800 w-full font-body bg-transparent">
-                <option value="1">1 турист</option>
-                <option value="2">2 туриста</option>
-                <option value="3">3 туриста</option>
-                <option value="4">4+</option>
-              </select>
-            </div>
-            <button className="btn-orange px-7 py-3 text-sm font-heading rounded-lg gap-2" style={{ fontWeight: 700 }}>
-              <Icon name="Search" size={15} />
-              Найти тур
-            </button>
-          </div>
+          {/* Tourvisor виджет поиска туров */}
+          <TourvisorWidget />
 
           <div className="flex flex-wrap gap-2 mt-5">
             <span className="text-white/60 text-xs font-body mt-1">Популярные:</span>
@@ -223,6 +224,36 @@ function Hero() {
       <a href="#tours" className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 animate-bounce">
         <Icon name="ChevronDown" size={28} />
       </a>
+    </section>
+  );
+}
+
+function TourSearch() {
+  return (
+    <section id="search" className="py-12 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-6">
+          <p className="section-label mb-2">Поиск туров</p>
+          <h2 className="text-2xl md:text-3xl font-heading text-[#0d47a1]" style={{ fontWeight: 700 }}>
+            Найдите свой идеальный тур
+          </h2>
+        </div>
+        {/* Tourvisor — полная форма поиска. Замените XXXXXX на ID вашего агентства */}
+        <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+          <iframe
+            src="https://tourvisor.ru/module/index.php?type=1&city=1&country=0&nocat=0&nights=7&nightsto=14&adults=2&child=0&transport=1&meal=0&rating=0&departure=1&lang=ru&btncolor=f57c00&btnfontcolor=ffffff&color=1565c0&font=Open+Sans&fbg=f5f7fa"
+            width="100%"
+            height="200"
+            frameBorder="0"
+            scrolling="no"
+            title="Поиск туров онлайн — ТУР КЛУБ"
+            style={{ display: "block" }}
+          />
+        </div>
+        <p className="text-center text-xs text-gray-400 font-body mt-3">
+          Поиск по всем туроператорам в реальном времени · Лучшие цены гарантированы
+        </p>
+      </div>
     </section>
   );
 }
@@ -514,7 +545,7 @@ function Contacts() {
           </div>
           <div className="lg:col-span-2 flex flex-col gap-4">
             {[
-              { icon: "Phone", label: "Телефон (бесплатно)", value: "8 800 123-45-67", sub: "Звонок по России бесплатный" },
+              { icon: "Phone", label: "Телефон (бесплатно)", value: "8 800 500-80-20", sub: "Звонок по России бесплатный" },
               { icon: "MessageCircle", label: "WhatsApp / Telegram", value: "+7 (495) 123-45-67", sub: "Отвечаем 24/7" },
               { icon: "Mail", label: "Email", value: "info@solnechnyput.ru", sub: "Ответим в течение часа" },
               { icon: "MapPin", label: "Офис", value: "Москва, ул. Тверская, 15", sub: "Пн–Вс: 9:00–21:00" },
@@ -548,7 +579,7 @@ function Footer() {
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 bg-white/15 rounded-lg flex items-center justify-center"><span className="text-lg">✈️</span></div>
               <div>
-                <p className="font-heading text-white text-base" style={{ fontWeight: 800 }}>Солнечный Путь</p>
+                <p className="font-heading text-white text-base" style={{ fontWeight: 800 }}>ТУР КЛУБ</p>
                 <p className="text-white/50 text-[10px] font-body">Турагентство · Официальный сайт</p>
               </div>
             </div>
@@ -610,6 +641,7 @@ const Index = () => {
       <Nav active={active} />
       <main>
         <Hero />
+        <TourSearch />
         <PromoStrip />
         <Tours />
         <Advantages />
