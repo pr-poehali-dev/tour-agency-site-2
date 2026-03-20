@@ -508,15 +508,30 @@ function Reviews() {
 function Contacts() {
   const { ref, inView } = useInView();
   const [form, setForm] = useState({ name: "", phone: "", dest: "", comment: "" });
+  const [activeOffice, setActiveOffice] = useState(0);
+
+  const offices = [
+    { brand: "PEGAS TOURISTIK", address: "ул. Дзержинского 23", mall: "ТРЦ «Север»", phone: "+7 (3532) 50-70-20", tel: "+73532507020" },
+    { brand: "PEGAS TOURISTIK", address: "ул. Новая 4", mall: "ТРК «Гулливер»", phone: "+7 (3532) 50-70-40", tel: "+73532507040" },
+    { brand: "PEGAS TOURISTIK", address: "ул. Салмышская 56А", mall: "ТК «Мандарин»", phone: "+7 (3532) 50-72-40", tel: "+73532507240" },
+    { brand: "ТУР-КЛУБ", address: "ул. Чкалова 51/1", mall: "Турагентство ТУР-КЛУБ", phone: "+7 (3532) 50-70-80", tel: "+73532507080" },
+    { brand: "PEGAS TOURISTIK", address: "Нежинское ш. 2А, вход 3", mall: "", phone: "+7 (3532) 50-72-20", tel: "+73532507220" },
+    { brand: "PEGAS TOURISTIK", address: "ул. Поляничко 5", mall: "", phone: "8 800 500-80-20", tel: "+78005008020" },
+    { brand: "CORAL Travel", address: "ул. Салмышская 56А", mall: "ТК «Мандарин»", phone: "+7 (3532) 50-72-40", tel: "+73532507240" },
+  ];
+
   return (
     <section id="contacts" className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <div ref={ref} className="text-center mb-10">
           <p className={`section-label mb-2 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>Свяжитесь с нами</p>
-          <h2 className={`text-3xl md:text-4xl font-heading transition-all duration-500 delay-100 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ fontWeight: 700 }}>Подберём тур бесплатно</h2>
-          <p className={`text-gray-500 font-body text-sm mt-3 transition-all duration-500 delay-200 ${inView ? "opacity-100" : "opacity-0"}`}>Оставьте заявку — менеджер перезвонит в течение 15 минут</p>
+          <h2 className={`text-3xl md:text-4xl font-heading transition-all duration-500 delay-100 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ fontWeight: 700 }}>Наши офисы в Оренбурге</h2>
+          <p className={`text-gray-500 font-body text-sm mt-3 transition-all duration-500 delay-200 ${inView ? "opacity-100" : "opacity-0"}`}>7 офисов по всему городу — выберите ближайший</p>
         </div>
+
         <div className={`grid grid-cols-1 lg:grid-cols-5 gap-8 transition-all duration-500 delay-300 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+
+          {/* Форма заявки */}
           <div className="lg:col-span-3 bg-[#f5f7fa] rounded-2xl p-8">
             <h3 className="font-heading text-[#0d47a1] text-lg mb-5" style={{ fontWeight: 700 }}>Заявка на подбор тура</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -543,25 +558,58 @@ function Contacts() {
             </button>
             <p className="text-[11px] text-gray-400 text-center mt-3 font-body">Нажимая кнопку, вы соглашаетесь с <a href="#" className="underline">политикой конфиденциальности</a></p>
           </div>
-          <div className="lg:col-span-2 flex flex-col gap-4">
-            {[
-              { icon: "Phone", label: "Телефон (бесплатно)", value: "8 800 500-80-20", sub: "Звонок по России бесплатный" },
-              { icon: "MessageCircle", label: "WhatsApp / Telegram", value: "+7 (495) 123-45-67", sub: "Отвечаем 24/7" },
-              { icon: "Mail", label: "Email", value: "info@solnechnyput.ru", sub: "Ответим в течение часа" },
-              { icon: "MapPin", label: "Офис", value: "Москва, ул. Тверская, 15", sub: "Пн–Вс: 9:00–21:00" },
-            ].map((c) => (
-              <div key={c.label} className="flex items-start gap-4 p-4 bg-[#f5f7fa] rounded-xl hover:bg-[#e8edf5] transition-colors">
-                <div className="w-10 h-10 gradient-blue rounded-lg flex items-center justify-center shrink-0"><Icon name={c.icon as "Phone"} size={18} className="text-white" /></div>
-                <div>
-                  <p className="text-[11px] text-gray-400 font-body mb-0.5">{c.label}</p>
-                  <p className="font-heading text-[#0d47a1] text-sm" style={{ fontWeight: 700 }}>{c.value}</p>
-                  <p className="text-[11px] text-gray-400 font-body">{c.sub}</p>
-                </div>
+
+          {/* Контакты и офисы */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            {/* Единый телефон */}
+            <a href="tel:+78005008020" className="flex items-center gap-4 p-4 gradient-blue rounded-xl hover:opacity-90 transition-opacity">
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+                <Icon name="Phone" size={18} className="text-white" />
               </div>
-            ))}
+              <div>
+                <p className="text-white/70 text-[11px] font-body">Единый номер (бесплатно)</p>
+                <p className="font-heading text-white text-base" style={{ fontWeight: 800 }}>8 800 500-80-20</p>
+              </div>
+            </a>
+
+            {/* Список офисов */}
+            <div className="bg-[#f5f7fa] rounded-xl overflow-hidden">
+              <div className="px-4 pt-4 pb-2">
+                <p className="font-heading text-[#0d47a1] text-sm mb-3" style={{ fontWeight: 700 }}>
+                  <Icon name="MapPin" size={14} className="inline mr-1 text-[#f57c00]" />
+                  Офисы в Оренбурге
+                </p>
+              </div>
+              <div className="divide-y divide-gray-200">
+                {offices.map((o, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveOffice(i)}
+                    className={`w-full text-left px-4 py-3 transition-colors ${activeOffice === i ? "bg-[#e8edf5]" : "hover:bg-[#eef2f8]"}`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-heading text-[#f57c00] uppercase tracking-wide truncate" style={{ fontWeight: 700 }}>{o.brand}</p>
+                        <p className="font-body text-[#0d47a1] text-xs font-semibold leading-tight">{o.address}</p>
+                        {o.mall && <p className="text-[10px] text-gray-400 font-body">{o.mall}</p>}
+                      </div>
+                      <a
+                        href={`tel:${o.tel}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[11px] font-heading text-[#1565c0] whitespace-nowrap hover:text-[#f57c00] transition-colors shrink-0"
+                        style={{ fontWeight: 600 }}
+                      >
+                        {o.phone}
+                      </a>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="gradient-blue rounded-xl p-4 text-white">
-              <p className="font-heading text-sm mb-2" style={{ fontWeight: 700 }}>🎁 Специальное предложение</p>
-              <p className="text-white/80 text-xs font-body leading-relaxed">Закажите тур сегодня и получите <strong className="text-yellow-300">кэшбек 5%</strong> + бесплатную страховку путешественника</p>
+              <p className="font-heading text-sm mb-1" style={{ fontWeight: 700 }}>🎁 Кэшбек 5% на все туры</p>
+              <p className="text-white/80 text-xs font-body leading-relaxed">Закажите тур сегодня и получите кэшбек <strong className="text-yellow-300">живыми деньгами</strong> на счёт</p>
             </div>
           </div>
         </div>
@@ -583,7 +631,8 @@ function Footer() {
                 <p className="text-white/50 text-[10px] font-body">Турагентство · Официальный сайт</p>
               </div>
             </div>
-            <p className="text-white/60 text-sm font-body leading-relaxed max-w-xs mb-4">Поиск и бронирование туров онлайн. Туры по России и за рубежом с кэшбеком 5%. Рассрочка, горящие туры, визовая поддержка.</p>
+            <p className="text-white/60 text-sm font-body leading-relaxed max-w-xs mb-1">Поиск и бронирование туров онлайн. Туры по России и за рубежом с кэшбеком 5%.</p>
+            <p className="text-white/50 text-xs font-body mb-4 flex items-center gap-1"><Icon name="MapPin" size={11} className="shrink-0" />г. Оренбург — 7 офисов в городе</p>
             <div className="flex gap-2">
               {["MessageCircle", "Instagram", "Youtube"].map((icon) => (
                 <button key={icon} className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"><Icon name={icon as "MessageCircle"} size={15} className="text-white" /></button>
@@ -608,7 +657,7 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-white/40 font-body">
-          <p>© 2025 Солнечный Путь. Все права защищены. ИНН 1234567890</p>
+          <p>© 2025 ТУР КЛУБ. Все права защищены. г. Оренбург</p>
           <div className="flex gap-5">
             <a href="#" className="hover:text-white/70 transition-colors">Политика конфиденциальности</a>
             <a href="#" className="hover:text-white/70 transition-colors">Публичная оферта</a>
